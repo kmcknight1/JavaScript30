@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Da Time</title>
+</head>
+<body>
+
+
+    <div class="clock">
+      <div class="clock-face">
+        <div class="hand hour-hand"></div>
+        <div class="hand min-hand"></div>
+        <div class="hand second-hand"></div>
+        <div class="dot"></div>
+      </div>
+      <div class="digi-clock">
+        <div class="hours"></div>
+        <div class="mins"></div>
+        <div class="seconds"></div>
+      </div>
+    </div>
+
+
+  <style>
+    html {
+      background-image: url(https://data.whicdn.com/images/318702361/original.jpg);
+      background-size: cover;
+      font-family: 'helvetica neue';
+      text-align: center;
+      font-size: 10px;
+    }
+
+    body {
+      margin: 0;
+      font-size: 2rem;
+      display: flex;
+      flex: 1;
+      min-height: 100vh;
+      align-items: center;
+    }
+
+    .clock {
+      width: 30rem;
+      height: 30rem;
+      border: 10px solid white;
+      border-radius: 50%;
+      margin: 50px auto;
+      position: relative;
+      padding: 2rem;
+      box-shadow:
+        0 0 0 4px rgba(255,255,255,0.3),
+        inset 0 0 0 3px #EFEFEF,
+        inset 0 0 10px white,
+        0 0 10px rgba(255,255,255,0.2);
+    }
+
+    .clock-face {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform: translateY(-3px); /* account for the height of the clock hands */
+    }
+
+    .hand {
+      width: 50%;
+      height: 6px;
+      background: black;
+      border-top-left-radius: 60%;
+      border-bottom-left-radius: 60%;
+      position: absolute;
+      top: 50%;
+      transform-origin: 100%;
+      transform: rotate(90deg);
+      transition: all 0.05s;
+      transition-timing-function: cubic-bezier(0.47, 1.46, 0, 1.9);
+    }
+
+    .min-hand {
+      right: -11%;
+      position: relative;
+      width: 40%;
+    }
+
+    .hour-hand {
+      right: -22%;
+      position: relative;
+      width: 28%;
+    }
+
+    .dot {
+      border: 10px solid black;
+      top: 44%;
+      right: -46%;
+      width: 5px;
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .digi-clock{
+      background-color: rgba(255,255,255,0.5);
+      width: 260px;
+      left: 5%;
+      border: 2px solid black;
+      border-radius: 15px;
+      height: 70px;
+      position: relative;
+      top: 25%;
+      display: flex;
+      flex-direction: row;
+      transition: all 0.05s;
+      transition-timing-function: ease-in;
+    }
+
+    .hours {
+      margin-left: 20px;
+      height: 70px;
+      width: 25%;
+      position: relative;
+      font-size: 270%;
+    }
+
+    .mins {
+      margin-left: 17px;
+      height: 70px;
+      width: 15%;
+      position: relative;
+      font-size: 270%;
+    }
+
+    .seconds {
+      margin-left: 17px;
+      height: 70px;
+      width: 36%;
+      position: relative;
+      font-size: 270%;
+    }
+
+  </style>
+
+
+  <script>
+
+const secondHand = document.querySelector('.second-hand');
+const minuteHand = document.querySelector('.min-hand');
+const hourHand = document.querySelector('.hour-hand');
+const allHands = document.querySelectorAll('.hand');
+const digiSeconds = document.querySelector('.seconds');
+const digiMins = document.querySelector('.mins');
+const digiHours = document.querySelector('.hours');
+
+function setDate () {
+    const now = new Date();
+
+    const seconds = now.getSeconds();
+    const secondsDegrees = ((seconds/60) * 360) + 90; 
+    secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+
+    const minutes = now.getMinutes();
+    const minutesDegrees = ((minutes/60) * 360) + ((seconds/60)*6) + 90;
+    minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;
+
+    const hours = now.getHours();
+    const hoursDegrees = ((hours/12) * 360) + ((minutes/60)*30) + 90;
+    hourHand.style.transform = `rotate(${hoursDegrees}deg)`; 
+
+    if (secondsDegrees===90) {
+      allHands.forEach(hand => hand.style.transition='none')
+    } else {
+      allHands.forEach(hand => hand.style.transition='')
+    }
+  }
+
+  function digiDate() {
+    const now = new Date();
+
+    const seconds = now.getSeconds();
+
+    const mins = now.getMinutes();
+
+    const hours = now.getHours();
+    
+
+    if (hours < 10) {
+      digiHours.innerHTML = ("0" + hours + ":");
+    } else {
+      digiHours.innerHTML = (hours + ":");
+    };
+
+    if (mins < 10) {
+      digiMins.innerHTML = ("0" + mins);
+    } else {
+      digiMins.innerHTML = mins;
+    };
+
+    if (seconds < 10) {
+      digiSeconds.innerHTML = (":" + "0" + seconds);
+    } else {
+      digiSeconds.innerHTML = (":" + seconds);
+    }
+
+  }
+
+  setInterval (setDate, 1000);
+  setInterval (digiDate, 1000);
+
+  setDate();
+
+  digiDate();
+
+  </script>
+</body>
+</html>
